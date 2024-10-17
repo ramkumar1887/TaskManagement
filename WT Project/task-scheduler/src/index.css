@@ -25,11 +25,10 @@ body{
   opacity: 0; /* Hide text opacity */
   overflow: hidden; /* Prevent text from showing */
   transition: width 0.3s ease, opacity 0.3s ease;
-  height:0;
+  height:auto;
   font-family: monospace;
   font-size: 20px;
   margin:5px;
-  border-radius: 15px;
   border: none;
   background-color: transparent;
 }
@@ -40,54 +39,74 @@ body{
   opacity: 1; /* Shows text */
 }
 
-.btn:hover{
+.navbtn:hover{
   cursor: pointer;
   transform:  scale(1.05);
 }
 
-.btn:active{
+.navbtn:hover svg{
+  /* fill: #605f5f; */
+  background-color: #ffffff73;
+  border-radius: 15px;
+}
+
+.navbtn:active{
   transform: scale(0.9);
 }
 
 .navbtn{
   font-family: monospace;
   /* font-size: 20px; */
-  margin: 5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   background-color: transparent;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  transition: flex-direction 0.3s ease, padding 0.3s ease;
+}
+
+.navbtn svg {
+  display: block; /* Prevents inline SVG from adding extra space */
 }
 
 .nav{
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 15px;
-  background-color:#ffc6c7;
+  background-color: #91b3fa;
   height: 100vh;
   overflow: hidden;
   width:50px;
   align-items: center;
   gap: 5px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  /* transition: width 0.3s ease; */
+  transition: 0.3s ease;
+  padding-top: 40px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+  position: fixed;
+  /* justify-content: center; */
 }
 
 .nav:hover{
-  width: auto;
-  align-items: flex-start;
+  width: 100px;
+  align-items: flex;
 }
 
 .nav-text {
   display: inline-flex;
-  opacity: 0;
-  max-width: 0; /* Hide the text */
+  opacity: 0; 
+  /* color: #605f5f; */
+  max-width: 0;
   overflow: hidden;
-  white-space: nowrap; /* Prevent text wrapping */
+  white-space: nowrap; 
   transition: opacity 0.3s ease;
-  font-size: 20px;
+  font-size: 15px;
+  margin:0px;
 }
 
 .nav:hover .nav-text {
@@ -96,24 +115,38 @@ body{
 }
 
 .nav:hover .navbtn{
-  flex-direction: row;
-  margin-bottom:15px;
+  flex-direction: column;
+  /* margin-bottom:15px; */
 }
 
 .size-4{
-  height: 40px;
-  width: 20px;
+  height: 45px;
+  width: 50px;
   margin-right: 7px;
+  margin-bottom:0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 0px;
+  padding-bottom:0px;
 }
 
 .main{
   display: flex; /* Arrange nav and content side-by-side */
-  width: 100vw; /* Full width of the screen */
+  width: 100%; /* Full width of the screen */
   height: 100vh;
+  overflow-x: hidden;
+  background-color: #a6c2fe;
+  /* overflow-y: scroll; */
 }
 
 .content{
   width:100%;
+  /* margin-left: 50px; */
+  transition: 0.3s ease;
+}
+
+.nav:hover ~ .content{
+  margin-left: 100px;
 }
 
 .size-5{
@@ -123,14 +156,14 @@ body{
 }
 
 .nav-title{
-  display: inline-flex;
-  align-items: center; /* Aligns text and SVG inline */
-  white-space: nowrap; /* Prevents text from wrapping */
-  padding: 0; /* Remove button padding */
-  margin-left: 10px; /* Small margin to push text when visible */
-  width: 0; /* Initially hide the text */
-  opacity: 0; /* Hide text opacity */
-  overflow: hidden; /* Prevent text from showing */
+
+  align-items: center; 
+  white-space: nowrap; 
+  padding: 0;
+  margin-left: 10px;
+  width: 0;
+  opacity: 0; 
+  overflow: hidden; 
   transition: width 0.3s ease, opacity 0.3s ease;
   height:0;
   font-family: monospace;
@@ -139,9 +172,9 @@ body{
 }
 
 .nav:hover .nav-title{
-  width: auto; /* Expands to fit the text */
+  width: auto; 
   height: auto;
-  opacity: 1; /* Shows text */
+  opacity: 1; 
 }
 
 .navhead{
@@ -160,19 +193,19 @@ body{
 
 .page-container{
   margin:20px;
-  width: 100%; /* Ensures the page container spans the full width */
+  width: 100%; 
   height: calc(100vh - 40px);
   display: flex;
   flex-direction: column;
 }
 
 .page-title{
-  font-size: 45px;
+  font-size: 30px;
 }
 
 .page-description{
   font-size: 20px;
-  margin-top:10px
+  margin-top:10px;
 }
 
 .task-container{
@@ -181,18 +214,145 @@ body{
   grid-template-columns: 1fr 1fr 1fr;
   gap: 10px;
   padding: 20px;
+  padding-left: 0px;
+  padding-right: 0px;
   flex-grow: 1;
   box-sizing: border-box;
   margin: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
 }
 
 .task-list{
-  background-color: #ffc6c7;
+  background-color: rgba(25, 118, 210, 0.769);
   height: 100vh;
   border-radius: 5px;
-  height: 100%; /* Ensures each list takes full height */
+  height: 100%; 
   padding: 10px;
   overflow-y: hidden;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
-  /* margin: 20px; */
 }
+
+.page-head{
+  display: inline-flex;
+  width: 100%;
+  padding:10px;
+  transition: 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.6);
+  background-color: aliceblue;
+}
+
+.lb-container {
+  margin-left: 870px;
+  display: flex; 
+  gap: 10px; 
+}
+
+.lb {
+  padding: 15px;
+  padding-top: 3px; 
+  padding-bottom: 3px;
+  background-color: #a6c2fe;
+  color: black; 
+  border: none; 
+  border-radius: 25px; 
+  cursor: pointer; 
+  font-family: monospace;
+  font-size: 15px;
+  transition: 0.3s ease;
+}
+
+.lb:hover {
+  background-color: #1166c1;
+  scale: 1.05;
+  color: white;
+}
+
+.lb:active{
+  scale: 0.95;
+}
+
+.page-head-title{
+  font-size: 40px;
+}
+
+
+.landing-page {
+  display: flex;         
+  justify-content: center;
+  align-items: center;    
+  height: 80vh;        
+  flex-direction: row;    
+  overflow: visible;  
+  padding: 20px;
+  gap: 20px;  
+  overflow: hidden;
+
+}
+
+.landing-page-text{
+  margin-right: 0px;
+  max-width: 500px;
+}
+
+.landing-page-head {
+  width:500px;
+  font-size: 60px;
+  margin-bottom: 10px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap; 
+  overflow: hidden; 
+  display: inline-block;
+  background-color: #91b3fa;
+  border-radius: 30px;
+  padding: 20px;
+}
+
+.cursor {
+  font-size: 60px;
+  display: inline-block;
+  animation: blink 0.5s step-end infinite;
+}
+
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+.landing-img-container {
+  width: 50%;
+  text-align: center;
+  position: relative;
+}
+
+.landing-img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 1s ease-in-out; /* Smooth fade-in */
+}
+
+.landing-img.show {
+  opacity: 1; /* Make image fully visible */
+}
+
+.landing-page-container{
+  display: flex;
+  flex-direction: row; 
+  align-items: center;
+  gap: 40px;
+  position: fixed;
+  background-color: #91b3fa;
+  padding-left:20px;
+  border-radius: 30px;
+  margin-top: 60px;
+  width:1100px;
+}
+
