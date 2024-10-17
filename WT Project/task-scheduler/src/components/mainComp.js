@@ -4,14 +4,14 @@ import Content from './Content';
 
 const Main = () => {
 
-  const [currentPage, setCurrentPage] = useState('Landing');
+  const [currentPage, setCurrentPage] = useState('Tasks');
   const onSelectPage = (page) => {
     setCurrentPage(page);
 
 };
 
 const contentStyle = {
-  marginLeft: currentPage === 'Landing' ? '0px' : '50px', // Conditional margin
+  paddingLeft: currentPage === 'Landing' ? '0px' : '50px', // Conditional margin
   transition: 'margin-left 0.3s ease', // Smooth transition effect
   width: '100%' // Ensure content spans full width
   
