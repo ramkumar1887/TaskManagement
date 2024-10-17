@@ -6,13 +6,13 @@
 
 @font-face {
   font-family: 'Michroma-Regular'; 
-  src: url('C:/Users/srish/Github/TaskManagement/WT Project/task-scheduler/public/assets/fonts/Michroma-Regular.ttf') format('truetype');
+  src: url('../public/assets/fonts/Michroma-Regular.ttf') format('truetype');
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Oxanium'; 
-  src: url('C:/Users/srish/Github/TaskManagement/WT Project/task-scheduler/public/assets/fonts/Oxanium.ttf') format('truetype');
+  src: url('../public/assets/fonts/Oxanium.ttf') format('truetype');
   font-style: normal;
 }
 
@@ -276,7 +276,7 @@ body{
 }
 
 .page-head{
-  display: inline-flex;
+  display: flex;
   width: 100%;
   padding:10px;
   transition: 0.3s ease;
@@ -284,12 +284,14 @@ body{
   position: relative;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.6);
   background-color: #DBE2EF;
+  justify-content: space-between;
 }
 
 .lb-container {
   margin-left: 870px;
   display: flex; 
   gap: 10px; 
+  float: right;
 }
 
 .lb {
@@ -318,7 +320,8 @@ body{
 }
 
 .page-head-title{
-  font-size: 40px;
+  font-size: 20px;
+  display: flex;
 }
 
 
