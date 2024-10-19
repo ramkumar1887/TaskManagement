@@ -79,11 +79,7 @@ const TaskForm = () => {
             required
           />
 
-            </div>
-        </div>
-    </div>
-  )
-}
+
           <DialogActions>
             <Button onClick={onClose} className='task-form-button'
             sx={{backgroundColor:'#a6c2fe', color:'black', fontFamily:'Oxanium'}}>
@@ -97,7 +93,13 @@ const TaskForm = () => {
         </form>
       </DialogContent>
     </Dialog>
-  );
+
+    
+        </div>
+        </div>
+    </div>
+  )
+}
 };
 
 export default TaskForm;

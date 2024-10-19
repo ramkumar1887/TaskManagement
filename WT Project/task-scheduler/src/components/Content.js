@@ -42,7 +42,7 @@ const Content = ({ currentPage, setCurrentPage }) => {
 
                     {currentPage === 'Landing' && (
                         <div className='lb-container'>
-                            {isLoggedIn ? (
+                            {localStorage.getItem('user') ? (
                                 <button className='lb' onClick={() => setCurrentPage('Dashboard')}>Go to Dashboard</button>
                             ) : (
                                 <>

@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 const Tasks = () => {
   const [showForm, setShowForm] = useState(false); // Manage form visibility
   const [taskData, setTaskData] = useState({ name: '', priority: '', dueDate: '' }); // Store form input
-  const [showForm, setShowForm] = useState(false); // Manage dialog visibility
+  // const [showForm, setShowForm] = useState(false); // Manage dialog visibility
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -20,7 +20,6 @@ const Tasks = () => {
     console.log('New Task:', taskData); // Handle submitted task data
     setShowForm(false); // Close the form after submission
   };
-
   return (
     <div className='page-container'>
       <h1 className='page-title'>Tasks</h1>
@@ -86,5 +85,6 @@ const Tasks = () => {
     </div>
   );
 };
+}
 
 export default Tasks;
