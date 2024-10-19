@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import TaskForm from './taskForm';
+import { IconButton, Tooltip } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 
 const Tasks = () => {
   const [showForm, setShowForm] = useState(false); // Manage form visibility
   const [taskData, setTaskData] = useState({ name: '', priority: '', dueDate: '' }); // Store form input
+  const [showForm, setShowForm] = useState(false); // Manage dialog visibility
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -13,6 +16,8 @@ const Tasks = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log('Task Data:', taskData); // Handle task submission logic
+  const handleFormSubmit = (taskData) => {
+    console.log('New Task:', taskData); // Handle submitted task data
     setShowForm(false); // Close the form after submission
   };
 
@@ -41,6 +46,14 @@ const Tasks = () => {
                 clipRule='evenodd'
               />
             </svg>
+            <Tooltip title="Add Task">
+              <IconButton
+                color="primary"
+                onClick={() => setShowForm(true)}
+              >
+                <AddIcon />
+              </IconButton>
+            </Tooltip>
           </div>
         </div>
 
@@ -65,6 +78,11 @@ const Tasks = () => {
           handleInputChange={handleInputChange}
         />
       )}
+      <TaskForm
+        open={showForm}
+        onClose={() => setShowForm(false)}
+        onSubmit={handleFormSubmit}
+      />
     </div>
   );
 };

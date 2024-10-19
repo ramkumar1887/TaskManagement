@@ -287,7 +287,7 @@ body{
   justify-content: space-between;
 }
 
-.plus-icon{
+.plus-icon, .cross-icon{
   height: 40px;
   width: 40px;
   padding: 5px;
@@ -297,10 +297,10 @@ body{
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.plus-icon:hover{
+.plus-icon:hover, .cross-icon:hover{
   scale: 1.05;
   cursor: pointer;
-  background-color: #dee3ec;
+  background-color: #a6c2fe;
 }
 
 .plus-icon:active{
@@ -458,9 +458,12 @@ body{
   width:30%;
 }
 
-.task-form-header{
+.task-form-header, .task-form-footer{
   justify-content: space-between;
   display: flex;
+  align-items: center;
+  padding: 5px;
+  width: 100%;
 }
 
 .task-form h2 {
@@ -491,5 +494,21 @@ background-color: #a6c2fe;
 float: right;
 border-radius: 5px;
 box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
-float: right;
+}
+
+
+
+.task-footer-button{
+  height: 40px;
+  width: 60px;
+  border:none;
+  padding: 5px;
+  background-color: #a6c2fe;
+  border-radius: 5px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+.task-form-button:hover{
+  scale:1.05;
 }
