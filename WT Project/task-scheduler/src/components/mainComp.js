@@ -3,28 +3,28 @@ import Nav from './navBoard';
 import Content from './Content';
 
 const Main = () => {
+    const [currentPage, setCurrentPage] = useState('Landing');
 
-  const [currentPage, setCurrentPage] = useState('Tasks');
-  const onSelectPage = (page) => {
-    setCurrentPage(page);
+    const onSelectPage = (page) => {
+        setCurrentPage(page);
+    };
 
+    const contentStyle = {
+        paddingLeft: currentPage === 'Landing' ? '0px' : '50px',
+        transition: 'margin-left 0.3s ease',
+        width: '100%',
+    };
+
+    return (
+        <div className='main'>
+            {currentPage !== 'Landing' && currentPage !== 'Login' && currentPage !== 'Signup' && (
+                <Nav onSelectPage={onSelectPage} />
+            )}
+            <div style={contentStyle}>
+                <Content currentPage={currentPage} setCurrentPage={setCurrentPage} />
+            </div>
+        </div>
+    );
 };
 
-const contentStyle = {
-  paddingLeft: currentPage === 'Landing' ? '0px' : '50px', // Conditional margin
-  transition: 'margin-left 0.3s ease', // Smooth transition effect
-  width: '100%' // Ensure content spans full width
-  
-};
-
-  return (
-    <div className='main'>
-        {currentPage !== 'Landing' && <Nav onSelectPage={onSelectPage} />}
-        <div style={contentStyle}>
-        <Content currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      </div>
-    </div>
-  )
-}
-
-export default Main
+export default Main;

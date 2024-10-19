@@ -28,6 +28,30 @@ body{
   margin-right: 10px;
   height: auto;
 } */
+/* Fading transition for content (Login/Signup) */
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Push-up transition for header */
+.push-up-exit {
+  transform: translateY(0);
+}
+.push-up-exit-active {
+  transform: translateY(-100%);
+  transition: transform 0.5s ease-in-out;
+}
 
 .btn{
   display: flex;
@@ -153,13 +177,21 @@ body{
   background-color: #a6c2fe;
   /* overflow-y: scroll; */
 }
-
 .content{
   width:100%;
   /* margin-left: 50px; */
   transition: 0.3s ease;
 }
+#sheet{
+  width:100%;
+  /* margin-left: 50px; */
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
 
+}
+#sheet.visible{
+  opacity: 1;
+}
 .nav:hover ~ .content{
   margin-left: 100px;
 }
