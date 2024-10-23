@@ -1,5 +1,24 @@
+/* Default Light Theme */
+:root {
+  --background-color: #E3FDFD;
+  --text-color: #000000;
+  --link-color: #1a73e8;
+  --primary: #71C9CE;
+  --secondary: #A6E3E9;
+  --ternary: #CBF1F5;
+  --opText: #ffffff;
+}
 
-
+/* Dark Theme */
+[data-theme="dark"] {
+  --background-color: #222831;
+  --text-color: #ffffff;
+  --link-color: #8ab4f8;
+  --primary: #393E46;
+  --secondary: #00ADB5;
+  --ternary: #EEEEEE;
+  --opText: #000000;
+}
 *{
   margin:0;
   box-sizing: border-box;
@@ -86,7 +105,8 @@ body{
 
 .navbtn:hover svg{
   /* fill: #605f5f; */
-  background-color: #ffffff73;
+  background-color: var(--ternary);
+  fill: var(--opText);
   border-radius: 15px;
 }
 
@@ -117,7 +137,7 @@ body{
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background-color: #91b3fa;
+  background-color: var(--primary);
   height: 100vh;
   overflow: hidden;
   width:50px;
@@ -148,6 +168,7 @@ body{
   transition: opacity 0.3s ease;
   font-size: 15px;
   margin:0px;
+  color: var(--text-color);
 }
 
 .nav:hover .nav-text {
@@ -176,7 +197,7 @@ body{
   width: 100%; /* Full width of the screen */
   height: 100vh;
   overflow-x: hidden;
-  background-color: #a6c2fe;
+  background-color: var(--background-color);
   /* overflow-y: scroll; */
 }
 .content{
@@ -250,6 +271,7 @@ body{
 
 .page-title{
   font-size: 30px;
+  color: var(--text-color);
 }
 
 .page-description{
@@ -317,7 +339,7 @@ body{
   transition: all 0.3s ease-in-out;
   position: relative;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.6);
-  background-color: #DBE2EF;
+  background-color: transparent;
   justify-content: space-between;
 }
 
@@ -332,7 +354,7 @@ body{
   padding: 15px;
   padding-top: 3px; 
   padding-bottom: 3px;
-  background-color: #a6c2fe;
+  background-color: var(--secondary);
   color: black; 
   border: none; 
   border-radius: 25px; 
@@ -356,6 +378,7 @@ body{
 .page-head-title{
   font-size: 20px;
   display: flex;
+  color: var(--text-color);
 }
 
 .page-head-title:hover{
@@ -389,9 +412,10 @@ body{
   white-space: pre-wrap; 
   overflow: hidden; 
   display: inline-block;
-  background-color: #91b3fa;
+  background-color: var(--primary);
   border-radius: 30px;
   padding: 20px;
+  color: var(--text-color);
 }
 
 .cursor {
@@ -432,7 +456,7 @@ body{
   align-items: center;
   gap: 40px;
   position: fixed;
-  background-color: #91b3fa;
+  background-color: var(--primary);
   padding-left:20px;
   border-radius: 30px;
   margin-top: 60px;

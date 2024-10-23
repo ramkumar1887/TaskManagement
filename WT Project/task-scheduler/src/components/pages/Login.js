@@ -51,15 +51,15 @@ const Login = ({ setCurrentPage }) => {
     return (
         <div id={`sheet ${visible ? 'visible' : ''}`}>
         <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
-            <Card sx={{ maxWidth: 400, width: '100%' }}>
+            <Card sx={{ maxWidth: 400, width: '100%', backgroundColor: 'var(--primary)'}}>
                 <CardContent>
                     <Button
                         startIcon={<ArrowBack />}
                         onClick={() => setCurrentPage('Landing')}
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 2 , color: 'var(--secondary)'}}
                     >
                     </Button>
-                    <Typography variant="h4" align="center" gutterBottom>Welcome Back</Typography>
+                    <Typography variant="h4" align="center" fontFamily="Oxanium" color='var(--text-color)' gutterBottom>Welcome Back</Typography>
 
                     <TextField 
                         fullWidth 
@@ -74,6 +74,30 @@ const Login = ({ setCurrentPage }) => {
                         required
                         error={!email && Boolean(error)} // Show error state if empty and error exists
                         helperText={!email && Boolean(error) ? 'Please fill this field.' : ''}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
                     <TextField 
                         fullWidth 
@@ -88,19 +112,43 @@ const Login = ({ setCurrentPage }) => {
                         required
                         error={!password && Boolean(error)} // Show error state if empty and error exists
                         helperText={!password && Boolean(error) ? 'Please fill this field.' : ''}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
 
                     {error && <Typography color="error" align="center">{error}</Typography>}
 
-                    <Button fullWidth variant="contained" color="primary" onClick={handleLogin} sx={{ mt: 2 }}>
+                    <Button fullWidth variant="contained" color="primary" onClick={handleLogin} sx={{ mt: 2 , backgroundColor:"var(--secondary)", color:'var(--text-color)'}}>
                         Log In
                     </Button>
 
-                    <Button fullWidth variant="outlined" color="secondary" startIcon={<Google />} onClick={handleGoogleLogin} sx={{ mt: 2 }}>
+                    <Button fullWidth variant="outlined" color="secondary" startIcon={<Google />} onClick={handleGoogleLogin} sx={{ mt: 2, backgroundColor:"var(--secondary)", color:'var(--text-color)'}}>
                         Log In with Google
                     </Button>
 
-                    <Button fullWidth color="primary" onClick={() => setCurrentPage('Signup')} sx={{ mt: 2 }}>
+                    <Button fullWidth color="primary" onClick={() => setCurrentPage('Signup')} sx={{ mt: 2, color:'var(--link-color)'}}>
                         Don't have an account? Sign Up
                     </Button>
                 </CardContent>

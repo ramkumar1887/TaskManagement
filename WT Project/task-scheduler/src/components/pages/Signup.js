@@ -82,15 +82,15 @@ const Signup = ({ setCurrentPage }) => {
 
     return (
         <Grid container justifyContent="center" alignItems="center" style={{ height: '100vh' }}>
-            <Card sx={{ maxWidth: 400, width: '100%' }}>
+            <Card sx={{ maxWidth: 400, width: '100%', backgroundColor: 'var(--primary)' }}>
                 <CardContent>
                     {/* Back Button */}
                     <Button
                         startIcon={<ArrowBack />}
                         onClick={() => setCurrentPage('Landing')}
-                        sx={{ mb: 2 }}
+                        sx={{ mb: 2, color: 'var(--secondary)' }}
                     />
-                    <Typography variant="h4" align="center" gutterBottom>Create an Account</Typography>
+                    <Typography variant="h4" align="center" fontFamily="Oxanium" color='var(--text-color)' gutterBottom>Create an Account</Typography>
 
                     {/* First Name */}
                     <TextField 
@@ -101,6 +101,30 @@ const Signup = ({ setCurrentPage }) => {
                         onChange={(e) => setFirstName(e.target.value)} 
                         error={Boolean(firstNameError)}
                         helperText={firstNameError}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
 
                     {/* Last Name */}
@@ -112,6 +136,30 @@ const Signup = ({ setCurrentPage }) => {
                         onChange={(e) => setLastName(e.target.value)} 
                         error={Boolean(lastNameError)}
                         helperText={lastNameError}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
 
                     {/* Email */}
@@ -123,6 +171,30 @@ const Signup = ({ setCurrentPage }) => {
                         onChange={(e) => setEmail(e.target.value)} 
                         error={Boolean(emailError)}
                         helperText={emailError}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
 
                     {/* Password */}
@@ -135,6 +207,30 @@ const Signup = ({ setCurrentPage }) => {
                         onChange={(e) => setPassword(e.target.value)} 
                         error={Boolean(passwordError)}
                         helperText={passwordError}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
 
                     {/* Confirm Password */}
@@ -147,23 +243,47 @@ const Signup = ({ setCurrentPage }) => {
                         onChange={(e) => setConfirmPassword(e.target.value)} 
                         error={Boolean(confirmPasswordError)}
                         helperText={confirmPasswordError}
+                        sx={{
+                            '& .MuiInputLabel-root': { 
+                                color: 'var(--text-color)', // Default label color
+                            },
+                            '& .MuiInputLabel-root.Mui-focused': {
+                                color: 'var(--link-color)', // Label color when focused
+                            },
+                            '& .MuiInputLabel-root:hover': {
+                                color: 'var(--link-color)', // Label color when hovered
+                            }, // Label color
+                            '& .MuiOutlinedInput-root': {
+                                '& fieldset': {
+                                    borderColor: 'var(--text-color)', // Border color
+                                },
+                                '&:hover fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color on hover
+                                },
+                                '&.Mui-focused fieldset': {
+                                    borderColor: 'var(--link-color)', // Border color when focused
+                                },
+                                '& input': { color: 'var(--text-color)' }, // Text inside the box
+                            },
+                            '& .MuiFormHelperText-root': { color: 'white' }, // Helper text color
+                        }}
                     />
 
                     {/* General Error */}
                     {error && <Typography color="error" align="center">{error}</Typography>}
 
                     {/* Sign Up Button */}
-                    <Button fullWidth variant="contained" color="primary" onClick={handleSignUp} sx={{ mt: 2 }}>
+                    <Button fullWidth variant="contained" color="primary" onClick={handleSignUp} sx={{ mt: 2, backgroundColor:"var(--secondary)", color:'var(--text-color)' }}>
                         Sign Up
                     </Button>
 
                     {/* Google Sign Up */}
-                    <Button fullWidth variant="outlined" color="secondary" startIcon={<Google />} onClick={handleGoogleSignUp} sx={{ mt: 2 }}>
+                    <Button fullWidth variant="outlined" color="secondary" startIcon={<Google />} onClick={handleGoogleSignUp} sx={{ mt: 2, backgroundColor:"var(--secondary)", color:'var(--text-color)' }}>
                         Sign Up with Google
                     </Button>
 
                     {/* Redirect to Login */}
-                    <Button fullWidth color="primary" onClick={() => setCurrentPage('Login')} sx={{ mt: 2 }}>
+                    <Button fullWidth color="primary" onClick={() => setCurrentPage('Login')} sx={{ mt: 2, color:'var(--link-color)' }}>
                         Already have an account? Log In
                     </Button>
                 </CardContent>

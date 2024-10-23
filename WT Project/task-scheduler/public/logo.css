@@ -1,0 +1,10 @@
+/* SVG styling based on the browser's theme */
+svg {
+    fill: black;
+  }
+  
+@media (prefers-color-scheme: dark) {
+  svg {
+    fill: white;
+  }
+}
