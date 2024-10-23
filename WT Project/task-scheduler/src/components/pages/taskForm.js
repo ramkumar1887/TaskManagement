@@ -1,105 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextField,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from '@mui/material';
 
-const TaskForm = ({ open, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState({ taskName: '', priority: '', dueDate: '' });
+const TaskForm = ({ open, onClose, onSubmit, taskData }) => {
+  const [taskName, setTaskName] = useState('');
+  const [priority, setPriority] = useState('');
+  const [dueDate, setDueDate] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  // Populate the form fields when taskData changes
+  useEffect(() => {
+    if (taskData) {
+      setTaskName(taskData.taskName || '');
+      setPriority(taskData.priority || '');
+      setDueDate(taskData.dueDate || '');
+    }
+  }, [taskData]);
+
+  const handleSubmit = () => {
+    onSubmit({ taskName, priority, dueDate });
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData); // Pass data to parent component
-    onClose(); // Close the dialog
-  };
-
-const TaskForm = () => {
   return (
-    <div className='form-overlay'>
-        <div className='task-form'>
-            <div className='task-form-header'>
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle sx={{fontFamily:'Oxanium', fontWeight:'bold'}}
-      >Add New Task</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>{taskData ? 'Edit Task' : 'Add Task'}</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleFormSubmit}>
-          <TextField
-            margin="normal"
-            fullWidth
-            label="Task Name"
-            name="taskName"
-            value={formData.taskName}
-            onChange={handleChange}
-            required
-            sx={{fontFamily:'Oxanium'}}
-          />
+        <TextField
+          label="Task Name"
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+          fullWidth
+          margin="normal"
+        />
 
-                <h1>Add Task</h1>
-          <FormControl component="fieldset" margin="normal">
-            <FormLabel component="legend" sx={{fontFamily:'Oxanium'}}
-            >Priority</FormLabel>
-            <RadioGroup
-              row
-              name="priority"
-              value={formData.priority}
-              onChange={handleChange}
-            >
-              <FormControlLabel value="high" control={<Radio />} sx={{fontFamily:'Oxanium'}} label="High" />
-              <FormControlLabel value="medium" control={<Radio />} sx={{fontFamily:'Oxanium'}} label="Medium" />
-              <FormControlLabel value="low" control={<Radio />} sx={{fontFamily:'Oxanium'}} label="Low" />
-            </RadioGroup>
-          </FormControl>
+        <div style={{ margin: '16px 0' }}>
+          <p>Priority:</p>
+          <RadioGroup
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            row
+          >
+            <FormControlLabel value="High" control={<Radio />} label="High" />
+            <FormControlLabel value="Medium" control={<Radio />} label="Medium" />
+            <FormControlLabel value="Low" control={<Radio />} label="Low" />
+          </RadioGroup>
+        </div>
 
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="cross-icon">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-          <TextField
-            margin="normal"
-            fullWidth
-            label="Due Date"
-            type="date"
-            name="dueDate"
-            value={formData.dueDate}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            required
-          />
-
-
-          <DialogActions>
-            <Button onClick={onClose} className='task-form-button'
-            sx={{backgroundColor:'#a6c2fe', color:'black', fontFamily:'Oxanium'}}>
-              Cancel
-            </Button>
-            <Button type="submit" variant="contained" className='task-form-button'
-             sx={{backgroundColor:'#a6c2fe', color:'black', fontFamily:'Oxanium'}}>
-              Add Task
-            </Button>
-          </DialogActions>
-        </form>
+        <TextField
+          label="Due Date"
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          margin="normal"
+        />
       </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={handleSubmit} color="primary">
+          {taskData ? 'Update' : 'Add'}
+        </Button>
+      </DialogActions>
     </Dialog>
-
-    
-        </div>
-        </div>
-    </div>
-  )
-}
+  );
 };
 
 export default TaskForm;

@@ -538,3 +538,15 @@ box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
 .task-form-button:hover{
   scale:1.05;
 }
+
+.task-item{
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.task-actions{
+  display: flex;
+  flex-direction: column;
+}
