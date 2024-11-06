@@ -11,7 +11,7 @@ import {
   Radio,
 } from '@mui/material';
 
-const TaskForm = ({ open, onClose, onSubmit, taskData }) => {
+const TaskForm = ({ open, onClose, onSubmit, taskData, mode }) => {
   const [taskName, setTaskName] = useState('');
   const [priority, setPriority] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -31,7 +31,7 @@ const TaskForm = ({ open, onClose, onSubmit, taskData }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{taskData ? 'Edit Task' : 'Add Task'}</DialogTitle>
+      <DialogTitle>{mode === 'edit' ? 'Edit Task' : 'Add Task'}</DialogTitle>
       <DialogContent>
         <TextField
           label="Task Name"
@@ -67,7 +67,7 @@ const TaskForm = ({ open, onClose, onSubmit, taskData }) => {
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button onClick={handleSubmit} color="primary">
-          {taskData ? 'Update' : 'Add'}
+        {mode === 'edit' ? 'Update' : 'Add'}
         </Button>
       </DialogActions>
     </Dialog>

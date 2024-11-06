@@ -42,6 +42,7 @@ body{
   font-family: 'Oxanium';
   background-color: #faeee7;
   /* color: #333333; */
+  border-radius: 5px;
 }
 
 /* .logo{
@@ -277,6 +278,7 @@ body{
 .page-description{
   font-size: 20px;
   margin-top:10px;
+  color: var(--text-color);
 }
 
 .task-container{
@@ -295,7 +297,7 @@ body{
 }
 
 .task-list{
-  background-color: #91b3fa;
+  background-color: var(--primary);
   height: 100vh;
   border-radius: 5px;
   height: 100%; 
@@ -309,6 +311,7 @@ body{
   align-items: center;
   /* width: 500px; */
   justify-content: space-between;
+  color: var(--text-color)
 }
 
 .plus-icon, .cross-icon{
@@ -540,13 +543,21 @@ box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .task-item{
-  border-radius: 10px;
+  border-radius: 5px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
+  padding: 5px;
 }
 
 .task-actions{
   display: flex;
   flex-direction: column;
+}
+
+.greeting-text{
+  font-size: 40px;
+  color: var(--text-color);
+  font-weight: bold;
+  margin-top: 15px;
 }

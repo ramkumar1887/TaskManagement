@@ -43,11 +43,17 @@ const Content = ({ currentPage, setCurrentPage }) => {
                     {currentPage === 'Landing' && (
                         <div className='lb-container'>
                             {localStorage.getItem('user') ? (
-                                <button className='lb' onClick={() => setCurrentPage('Dashboard')}>Go to Dashboard</button>
+                                <button className='lb' onClick={() => setCurrentPage('Dashboard')}
+                                style={{backgroundColor:'var(--primary)', color:'var(--text-color)'}}
+                                >Go to Dashboard</button>
                             ) : (
                                 <>
-                                    <button className='lb' onClick={() => setCurrentPage('Login')}>Log In</button>
-                                    <button className='lb' onClick={() => setCurrentPage('Signup')}>Sign Up</button>
+                                    <button className='lb' onClick={() => setCurrentPage('Login')}
+                                    style={{backgroundColor:'var(--primary)', color:'var(--text-color)'}}
+                                    >Log In</button>
+                                    <button className='lb' onClick={() => setCurrentPage('Signup')}
+                                    style={{backgroundColor:'var(--primary)', color:'var(--text-color)'}}
+                                    >Sign Up</button>
                                 </>
                             )}
                         </div>
