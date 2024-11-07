@@ -25,7 +25,6 @@ function App() {
     // Clean up the event listener on component unmount
     return () => mediaQuery.removeEventListener("change", handleThemeChange);
   }, []); // Empty dependency array to run effect only once on mount
-
   // Update the theme on the document body when the theme state changes
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

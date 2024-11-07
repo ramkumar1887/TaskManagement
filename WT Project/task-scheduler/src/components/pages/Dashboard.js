@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
 const Dashboard = () => {
-  const  [greeting, setGreeting] = useState('');
-  const {todayTasks, setTodayTasks} = useState([]);
+  const [greeting, setGreeting] = useState('');
+  const [todayTasks, setTodayTasks] = useState([]); // Fixed the useState syntax here
 
-  useEffect(()=>{
-    const currentHour= new Date().getHours();
+  useEffect(() => {
+    const currentHour = new Date().getHours();
 
-    if(currentHour<12){
+    if (currentHour < 12) {
       setGreeting("Good Morning");
-    }
-    else if(12<currentHour<17){
+    } else if (currentHour >= 12 && currentHour < 17) { // Fixed comparison logic
       setGreeting("Good Afternoon");
-    }
-    else{
+    } else {
       setGreeting("Good Evening");
     }
 
@@ -22,7 +20,7 @@ const Dashboard = () => {
       const todayDate = new Date().toISOString().split('T')[0]; // Format today’s date as YYYY-MM-DD
 
       // Ensure tasks.todo is defined before filtering
-      const tasksForToday = (tasks.todo || []).filter(tasks => tasks.dueDate === todayDate);
+      const tasksForToday = (tasks.todo || []).filter(task => task.dueDate === todayDate);
       setTodayTasks(tasksForToday);
     } catch (error) {
       console.error("Failed to parse tasks from localStorage:", error);
@@ -30,17 +28,16 @@ const Dashboard = () => {
     }
   }, []);
 
-
-
   return (
     <div className='page-container'>
-        <h1 className='page-title'>Dashboard</h1>
-        <p className='greeting-text'>{greeting}, User</p>
-        <p className='page-description' 
-        style={{marginTop:'0px'}}>Here is an Overview of your Schedule</p>
-        <div className='today-tasks-container'>
+      <h1 className='page-title'>Dashboard</h1>
+      <p className='greeting-text'>{greeting}, User</p>
+      <p className='page-description' style={{ marginTop: '0px' }}>
+        Here is an Overview of your Schedule
+      </p>
+      <div className='today-tasks-container'>
         <h2>Tasks Scheduled for Today</h2>
-        {todayTasks.length > 0 ? (
+        {Array.isArray(todayTasks) && todayTasks.length > 0 ? ( // Ensure todayTasks is an array
           <ul>
             {todayTasks.map((task, index) => (
               <li key={index} className="task-item">
@@ -52,9 +49,8 @@ const Dashboard = () => {
           <p>No tasks scheduled for today.</p>
         )}
       </div>
-
     </div>
-  )
+  );
 }
 
-export default Dashboard
+export default Dashboard;
