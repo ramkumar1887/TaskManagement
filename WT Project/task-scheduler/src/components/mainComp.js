@@ -10,14 +10,14 @@ const Main = () => {
     };
 
     const contentStyle = {
-        paddingLeft: currentPage === 'Landing' ? '0px' : '50px',
+        paddingLeft: currentPage === 'Landing' || currentPage === 'addTask' ? '0px' : '50px',
         transition: 'margin-left 0.3s ease',
         width: '100%',
     };
 
     return (
         <div className='main'>
-            {currentPage !== 'Landing' && currentPage !== 'Login' && currentPage !== 'Signup' && (
+            {currentPage !== 'Landing' && currentPage !== 'Login' && currentPage !== 'Signup' && currentPage !== 'addTask' && (
                 <Nav onSelectPage={onSelectPage} />
             )}
             <div style={contentStyle}>

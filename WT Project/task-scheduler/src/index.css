@@ -295,13 +295,15 @@ body{
   margin-left: 0px;
   margin-right: 0px;
 }
-
+.description:hover .edit-icon{
+  opacity: 1;
+}
 .task-list{
   background-color: var(--primary);
   height: 100vh;
   border-radius: 5px;
   height: 100%; 
-  padding: 10px;
+  padding: 0px;
   overflow-y: hidden;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
 }
@@ -311,7 +313,12 @@ body{
   align-items: center;
   /* width: 500px; */
   justify-content: space-between;
-  color: var(--text-color)
+  color: var(--text-color);
+  padding: 10px;
+  border-bottom: 2px solid var(--text-color);
+  border-bottom-width: '90%';
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
 }
 
 .plus-icon, .cross-icon{

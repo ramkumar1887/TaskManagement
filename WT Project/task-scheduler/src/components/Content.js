@@ -7,7 +7,7 @@ import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Landing from './pages/Landing';
-
+import AddTask from './pages/AddTask';
 const Content = ({ currentPage, setCurrentPage }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -60,17 +60,18 @@ const Content = ({ currentPage, setCurrentPage }) => {
                     )}
                 </div>
             )}
-
+            
             {/* Render the appropriate page based on the currentPage */}
             <div className={`sheet ${visible ? 'visible' : ''}`}>
                 {currentPage === 'Landing' && <Landing />}
                 {currentPage === 'Dashboard' && <Dashboard />}
-                {currentPage === 'Tasks' && <Tasks />}
+                {currentPage === 'Tasks' && <Tasks setCurrentPage={setCurrentPage} />}
                 {currentPage === 'Calendar' && <Calendar />}
                 {currentPage === 'Teams' && <Teams />}
                 {currentPage === 'Settings' && <Settings />}
                 {currentPage === 'Login' && <Login setCurrentPage={setCurrentPage} />}
                 {currentPage === 'Signup' && <Signup setCurrentPage={setCurrentPage} />}
+                {currentPage === 'addTask' && <AddTask />}
             </div>
         </div>
     );
