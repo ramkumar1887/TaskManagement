@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   TextField,
   Button,
@@ -11,27 +11,33 @@ import {
   Radio,
 } from '@mui/material';
 
-const TaskForm = ({ open, onClose, onSubmit, taskData, mode }) => {
+const TaskForm = ({ open, onClose, onSave }) => {
   const [taskName, setTaskName] = useState('');
   const [priority, setPriority] = useState('');
   const [dueDate, setDueDate] = useState('');
 
-  // Populate the form fields when taskData changes
-  useEffect(() => {
-    if (taskData) {
-      setTaskName(taskData.taskName || '');
-      setPriority(taskData.priority || '');
-      setDueDate(taskData.dueDate || '');
-    }
-  }, [taskData]);
+  // Reset form fields when the dialog closes
+  const handleClose = () => {
+    setTaskName('');
+    setPriority('');
+    setDueDate('');
+    onClose();
+  };
 
-  const handleSubmit = () => {
-    onSubmit({ taskName, priority, dueDate });
+  // Handle form submission
+  const handleSave = () => {
+    const newTask = {
+      taskName,
+      priority,
+      dueDate,
+    };
+    onSave?.(newTask); // Call onSave if provided
+    handleClose();
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{mode === 'edit' ? 'Edit Task' : 'Add Task'}</DialogTitle>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>{'Add Task'}</DialogTitle>
       <DialogContent>
         <TextField
           label="Task Name"
@@ -65,9 +71,9 @@ const TaskForm = ({ open, onClose, onSubmit, taskData, mode }) => {
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} color="primary">
-        {mode === 'edit' ? 'Update' : 'Add'}
+        <Button onClick={handleClose}>Cancel</Button>
+        <Button color="primary" onClick={handleSave}>
+          {'Add'}
         </Button>
       </DialogActions>
     </Dialog>

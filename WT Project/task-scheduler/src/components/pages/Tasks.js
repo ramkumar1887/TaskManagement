@@ -1,17 +1,28 @@
-import React, { useState, useEffect, useRef } from 'react';
-import TaskForm from './taskForm';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { IconButton, Tooltip, List, ListItem, TextField, Button, Box, TextareaAutosize } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import PersonIcon from '@mui/icons-material/Person';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState, useEffect, useRef } from "react";
+import TaskForm from "./taskForm";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  IconButton,
+  Tooltip,
+  List,
+  ListItem,
+  TextField,
+  Button,
+  Box,
+  TextareaAutosize,
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import PersonIcon from "@mui/icons-material/Person";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import { fetchUserTasks  } from "./taskService";
 const Tasks = ({ setCurrentPage }) => {
-  const [newTask, setNewTask] = useState('');  // Input for new task in "todo"
+  const [newTask, setNewTask] = useState(""); // Input for new task in "todo"
   const liRef = useRef(null);
   const liRef1 = useRef(null);
+  const [isTaskFormOpen, setIsTaskFormOpen] = useState(false); // State for TaskForm visibility
   const [isEditing, setIsEditing] = useState(false);
   const [isEditing1, setIsEditing1] = useState(false);
   const [editingTaskId, setEditingTaskId] = useState(null); // Track task being edited
@@ -20,7 +31,22 @@ const Tasks = ({ setCurrentPage }) => {
     ongoing: [],
     completed: [],
   });
-  const [editedDescription, setEditedDescription] = useState(''); // New state for the edited text
+  const [editedDescription, setEditedDescription] = useState(""); // New state for the edited text
+  useEffect(() => {
+    // Fetch tasks on component mount
+    const initializeTasks = async () => {
+      const userTasks = await fetchUserTasks();
+      if (userTasks) {
+        setTasks({
+          todo: userTasks.todo || [],
+          ongoing: userTasks.ongoing || [],
+          completed: userTasks.completed || [],
+        });
+      }
+    };
+
+    initializeTasks();
+  }, []);
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (liRef1.current && !liRef1.current.contains(event.target)) {
@@ -29,14 +55,14 @@ const Tasks = ({ setCurrentPage }) => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   // Initialize tasks from localStorage or defaults
   useEffect(() => {
-    const storedTasks = localStorage.getItem('tasks');
+    const storedTasks = localStorage.getItem("tasks");
     if (storedTasks) {
       try {
         const parsedTasks = JSON.parse(storedTasks);
@@ -46,39 +72,96 @@ const Tasks = ({ setCurrentPage }) => {
           completed: parsedTasks.completed || [],
         });
       } catch (e) {
-        console.error('Failed to parse tasks from localStorage:', e);
+        console.error("Failed to parse tasks from localStorage:", e);
       }
     }
   }, []);
 
   const saveTasksToLocalStorage = (updatedTasks) => {
     setTasks(updatedTasks);
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+
+    // Get the user from localStorage
+    const user = localStorage.getItem("user");
+    const allTasks = updatedTasks.todo.map((task) => task.id)
+    .concat(updatedTasks.ongoing.map((task) => task.id))
+    .concat(updatedTasks.completed.map((task) => task.id));
+    // Check if user exists and providerData is available
+    if (
+      user &&
+      JSON.parse(user).providerData &&
+      JSON.parse(user).providerData[0]
+    ) {
+      const uid = JSON.parse(user).providerData[0].uid;
+
+      fetch("http://localhost:5000/taskList", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: uid,
+          taskIds: allTasks
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log("Success:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      // Handle the case when user data or providerData is missing
+      console.error("User or provider data is missing from localStorage");
+    }
+
   };
   const handleDelete = (index, section) => {
+    mongoDBtask(tasks[section][index].id, null, null);
     const updatedTasks = {
       ...tasks,
       [section]: tasks[section].filter((_, i) => i !== index),
     };
     saveTasksToLocalStorage(updatedTasks);
   };
-  
+
   // Add new task and update local storage
   const addNewTask = () => {
+    const date = Date.now().toString()
     const updatedTasks = {
       ...tasks,
-      todo: [...tasks.todo, { id: Date.now().toString(), description: newTask }],
+      todo: [
+        ...tasks.todo,
+        { id: date, description: newTask },
+      ],
     };
     setTasks(updatedTasks);
-    setNewTask('');
+    setNewTask("");
     setIsEditing(false);
-    updateLocalStorage(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
+    mongoDBtask(date, newTask, "todo");
   };
-
-
-  const updateLocalStorage = (updatedTasks) => {
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
-  };
+  const mongoDBtask = (id, description, status) => {
+    fetch("http://localhost:5000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: id,
+        description: description,
+        status: status
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }
 
   // Close input if user clicks outside the input area
   useEffect(() => {
@@ -87,9 +170,9 @@ const Tasks = ({ setCurrentPage }) => {
         setIsEditing(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
   // Task Edit Functionality
@@ -99,37 +182,29 @@ const Tasks = ({ setCurrentPage }) => {
   const handleSaveEdit = (index, section) => {
     //console.log("Save Called");
     handleUpdateTask(index, section, editedDescription); // Call a function to save changes
-    setEditingTaskId(null)  // Disable edit mode
+    setEditingTaskId(null); // Disable edit mode
   };
   const handleUpdateTask = (index, section, updatedDescription) => {
-    // console.error(`${index}, ${section}`)
-    // if (!tasks[section] || !Array.isArray(tasks[section])) {
-    //   console.error(`Section "${section}" is undefined or not an array.`);
-    //   return;
-    // }
-
     const updatedTasks = {
       ...tasks,
       [section]: tasks[section].map((task, i) =>
         i === index ? { ...task, description: updatedDescription } : task
       ),
     };
-    //console.log(updatedTasks);
     saveTasksToLocalStorage(updatedTasks);
-    setEditingTaskId(null);  // Exit edit mode
+    mongoDBtask(tasks[section][index].id, updatedDescription, section);
+    setEditingTaskId(null); // Exit edit mode
     setEditedDescription(null);
   };
 
   const onDragEnd = (result) => {
-    const { destination, source } = result;
+    const { destination, source, draggableId } = result;
 
     // If there's no destination, exit
     if (!destination) return;
 
     // If the task is dropped in the same position, do nothing
-    if (
-      destination.droppableId === source.droppableId
-    ) {
+    if (destination.droppableId === source.droppableId) {
       return;
     }
 
@@ -148,15 +223,17 @@ const Tasks = ({ setCurrentPage }) => {
       [sourceSection]: sourceTasks,
       [destinationSection]: destinationTasks,
     };
-    console.log(`after tasks: ${JSON.stringify(tasks)}`);
-    console.log(`updatedtasks: ${JSON.stringify(updatedTasks)}`);
+    //console.log(`after tasks: ${JSON.stringify(tasks)}`);
+    //console.log(`updatedtasks: ${JSON.stringify(updatedTasks)}`);
     // Save updated tasks to localStorage
     saveTasksToLocalStorage(updatedTasks);
+    console.log(draggableId);
+    mongoDBtask(draggableId, null, destinationSection);
   };
   const onWrong = () => {
-    setEditingTaskId(null); 
+    setEditingTaskId(null);
     setEditedDescription(null);
-  }
+  };
 
   // Render Task List
   const renderTaskList = (section, provided) => (
@@ -173,79 +250,125 @@ const Tasks = ({ setCurrentPage }) => {
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               key={task.id}
-              sx={{ position: 'relative', width: '100%', marginY: 0.5, padding: 0 }}
+              sx={{
+                position: "relative",
+                width: "100%",
+                marginY: 0.5,
+                padding: 0,
+              }}
             >
               <Box
-                ref={liRef1}
+                ref={editingTaskId === task.id ? liRef1 : null}
                 className="task-card"
+                onClick={() => {
+                  setIsTaskFormOpen(true);
+                  console.log("Task Form Called");
+                }}
                 sx={{
-                  //padding: 1, 
-                  width: '100%',
-                  backgroundColor: 'var(--background-color)',
+                  //padding: 1,
+                  width: "100%",
+                  backgroundColor: "var(--background-color)",
                   borderRadius: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  '&:hover .edit-icon': {
+                  display: "flex",
+                  alignItems: "center",
+                  "&:hover .edit-icon": {
                     opacity: 1, // Make icon visible on hover
                   },
-                  cursor: 'pointer',
+                  cursor: "pointer",
                 }}
               >
                 {editingTaskId === task.id ? (
                   <>
                     <TextareaAutosize
-                      value={editedDescription ? editedDescription : task.description}
-                      onChange={(e) => setEditedDescription(e.target.value)}
+                      value={
+                        editingTaskId === task.id
+                          ? editedDescription
+                          : task.description
+                      } // Display correct value
+                      onChange={(e) => {
+                        setEditedDescription(e.target.value);
+                        e.stopPropagation();
+                      }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
                       style={{
-                        width: '100%',
-                        padding: '8px',
-                        borderRadius: '4px',
-                        borderColor: 'var(--secondary)',
-                        fontSize: '14px',
-                        resize: 'none',
-                        color: 'var(--text-color)',
-                        backgroundColor: 'var(--background-color)',
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: "4px",
+                        borderColor: "var(--secondary)",
+                        fontSize: "14px",
+                        resize: "none",
+                        color: "var(--text-color)",
+                        backgroundColor: "var(--background-color)",
                       }}
                     />
                     <IconButton
-                      onClick={() => handleSaveEdit(index, section)}
+                      onClick={(e) => {
+                        handleSaveEdit(index, section);
+                        e.stopPropagation();
+                      }}
                       disabled={!editedDescription} // Disable based on conditions
-                      sx={{ color: 'var(--text-color)', fontSize: '18px', }}>
+                      sx={{ color: "var(--text-color)", fontSize: "18px" }}
+                    >
                       <CheckIcon />
                     </IconButton>
-                    <IconButton  onClick={onWrong} sx={{ color: 'var(--text-color)', fontSize: '18px' }}>
+                    <IconButton
+                      onClick={(e) => {
+                        onWrong();
+                        e.stopPropagation();
+                      }}
+                      sx={{ color: "var(--text-color)", fontSize: "18px" }}
+                    >
                       <CloseIcon />
                     </IconButton>
                   </>
                 ) : (
                   <>
                     <List sx={{ flex: 1, padding: 0 }}>
-                      <ListItem sx={{ padding: '8px', paddingBottom: '2px' }}>
-                        <span style={{ color: 'var(--text-color)' }}>{task.description}</span>
+                      <ListItem sx={{ padding: "8px", paddingBottom: "2px" }}>
+                        <span style={{ color: "var(--text-color)" }}>
+                          {task.description}
+                        </span>
+                        <span></span>
                         <EditIcon
                           className="edit-icon"
                           sx={{
-                            color: 'var(--text-color)',
+                            color: "var(--text-color)",
                             opacity: 0, // Icon is hidden initially
-                            transition: 'opacity 0.2s',
-                            cursor: 'pointer',
-                            //marginLeft: 1, 
-                            fontSize: '18px',
+                            transition: "opacity 0.2s",
+                            cursor: "pointer",
+                            fontSize: "18px",
                           }}
-                          onClick={() => setEditingTaskId(task.id)}
+                          onClick={(e) => {
+                            setEditingTaskId(task.id);
+                            setEditedDescription(task.description); // Initialize with task description
+                            e.stopPropagation();
+                          }}
                         />
                         <DeleteIcon
-                          className='delete-icon'
+                          className="delete-icon"
                           sx={{
-                            color: 'var(--text-color)',
-                            marginLeft: 'auto',
-                            cursor: 'pointer',
+                            color: "var(--text-color)",
+                            marginLeft: "auto",
+                            cursor: "pointer",
                           }}
-                          onClick={() => handleDelete(index, section)}
+                          onClick={(e) => {
+                            handleDelete(index, section);
+                            e.stopPropagation();
+                          }}
                         />
                       </ListItem>
-                      <ListItem sx={{ padding: '8px', paddingTop: '2px' }}>
-                        <PersonIcon sx={{ color: 'var(--text-color)', marginLeft: 'auto' }} />
+                      <ListItem sx={{ padding: "8px", paddingTop: "2px" }}>
+                        <PersonIcon
+                          sx={{
+                            color: "var(--text-color)",
+                            marginLeft: "auto",
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        />
                       </ListItem>
                     </List>
                   </>
@@ -255,19 +378,19 @@ const Tasks = ({ setCurrentPage }) => {
           )}
         </Draggable>
       ))}
-      {section === 'todo' && (
+      {section === "todo" && (
         <ListItem
           ref={liRef}
           sx={{
-            position: 'relative',
-            width: '100%',
-            // marginTop: 1, 
+            position: "relative",
+            width: "100%",
+            // marginTop: 1,
             padding: isEditing ? 1 : 0,
-            border: isEditing ? '2px solid var(--secondary)' : 'none', // Border only when editing
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: '4px', // Optional: rounded corners for the border
-            overflow: 'hidden' // Ensures nothing spills outside the border
+            border: isEditing ? "2px solid var(--secondary)" : "none", // Border only when editing
+            display: "flex",
+            flexDirection: "column",
+            borderRadius: "4px", // Optional: rounded corners for the border
+            overflow: "hidden", // Ensures nothing spills outside the border
           }}
         >
           {isEditing ? (
@@ -280,18 +403,18 @@ const Tasks = ({ setCurrentPage }) => {
                 placeholder="Add a new task..."
                 minRows={1} // Minimum height of one row, adjust as needed
                 style={{
-                  width: '100%', // Full width
+                  width: "100%", // Full width
                   padding: 0, // Remove padding around the input field
-                  border: 'none', // No border
-                  resize: 'none', // Disable resizing
-                  fontSize: '16px', // Set font size here
-                  color: 'var(--text-color)',
-                  caretColor: 'var(--text-color)',
-                  outline: 'none', // No outline on focus
-                  background: 'none', // Optional: make background transparent
+                  border: "none", // No border
+                  resize: "none", // Disable resizing
+                  fontSize: "16px", // Set font size here
+                  color: "var(--text-color)",
+                  caretColor: "var(--text-color)",
+                  outline: "none", // No outline on focus
+                  background: "none", // Optional: make background transparent
                 }}
                 placeholderStyle={{
-                  color: 'var(--text-color)', // Set placeholder color
+                  color: "var(--text-color)", // Set placeholder color
                   opacity: 1, // Ensures the color is fully opaque
                 }}
                 // // Use a CSS-in-JS approach for placeholder color
@@ -309,10 +432,10 @@ const Tasks = ({ setCurrentPage }) => {
                 color="primary"
                 onClick={addNewTask}
                 sx={{
-                  alignSelf: 'flex-end', // Align the button to the right
-                  marginTop: 'auto',
-                  backgroundColor: 'var(--secondary)', // Ensure the button has secondary color
-                  color: 'var(--text-color)'
+                  alignSelf: "flex-end", // Align the button to the right
+                  marginTop: "auto",
+                  backgroundColor: "var(--secondary)", // Ensure the button has secondary color
+                  color: "var(--text-color)",
                 }}
               >
                 Create
@@ -320,18 +443,18 @@ const Tasks = ({ setCurrentPage }) => {
             </>
           ) : (
             <Button
-              variant="text" // No border for the button
+              variant="text" // No border for the buttonf
               color="primary"
               onClick={() => setIsEditing(true)}
               sx={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                padding: '6px 0px',
-                color: 'var(--text-color)',
-                '&:hover': {
-                  backgroundColor: 'var(--background-color)', // No background on hover
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                padding: "6px 0px",
+                color: "var(--text-color)",
+                "&:hover": {
+                  backgroundColor: "var(--background-color)", // No background on hover
                 },
               }}
             >
@@ -343,7 +466,7 @@ const Tasks = ({ setCurrentPage }) => {
                 fill="currentColor"
                 className="bi bi-plus"
                 viewBox="0 0 16 16"
-                style={{ marginRight: '8px' }}
+                style={{ marginRight: "8px" }}
               >
                 <path d="M8 7V1h1v6h6v1H9v6H8V8H2V7h6z" />
               </svg>
@@ -351,7 +474,6 @@ const Tasks = ({ setCurrentPage }) => {
             </Button>
           )}
         </ListItem>
-
       )}
     </List>
   );
@@ -359,12 +481,13 @@ const Tasks = ({ setCurrentPage }) => {
     <div className="page-container">
       <h1 className="page-title">Tasks</h1>
       <p className="page-description">
-        Organize and track tasks efficiently, prioritizing deadlines and progress for seamless task management.
+        Organize and track tasks efficiently, prioritizing deadlines and
+        progress for seamless task management.
       </p>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="task-container">
-          {['todo', 'ongoing', 'completed'].map((section) => (
+          {["todo", "ongoing", "completed"].map((section) => (
             <Droppable key={section} droppableId={section}>
               {(provided) => (
                 <div
@@ -374,16 +497,24 @@ const Tasks = ({ setCurrentPage }) => {
                 >
                   {/* {console.log(`Droppable ID: ${provided.droppableId}`)} */}
                   <div className="list-header">
-                    <h1>{section.charAt(0).toUpperCase() + section.slice(1)}</h1>
+                    <h1>
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </h1>
                   </div>
                   {renderTaskList(section, provided)}
-                  {provided.placeholder}  {/* Ensure placeholder is added */}
+                  {provided.placeholder} {/* Ensure placeholder is added */}
                 </div>
               )}
             </Droppable>
           ))}
         </div>
       </DragDropContext>
+      {/* TaskForm Dialog */}
+      <TaskForm
+        open={isTaskFormOpen}
+        onClose={() => setIsTaskFormOpen(false)}
+        //onSave={handleAddTask}   // Pass function to add task
+      />
     </div>
   );
 };

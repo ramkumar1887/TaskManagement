@@ -61,7 +61,13 @@ const Signup = ({ setCurrentPage }) => {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                console.log('User signed up:', user);
+                //console.log('User signed up:', user);
+                localStorage.setItem('user', JSON.stringify(user));
+                fetch("/users", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({uid: user.providerData[0].uid}),
+                  });
                 setCurrentPage('Dashboard');  // Redirect to dashboard after signup
             } catch (error) {
                 setError(error.message);
@@ -73,7 +79,13 @@ const Signup = ({ setCurrentPage }) => {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            console.log('Google Sign Up:', user);
+            //console.log('Google Sign Up:', user);
+            localStorage.setItem('user', JSON.stringify(user));
+            fetch("http://localhost:5000/users", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({username: user.providerData[0].uid}),
+              });
             setCurrentPage('Dashboard');  // Redirect to dashboard after Google signup
         } catch (error) {
             setError(error.message);
