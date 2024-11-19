@@ -36,7 +36,7 @@ const Dashboard = () => {
         Here is an Overview of your Schedule
       </p>
       <div className='today-tasks-container'>
-        <h2>Tasks Scheduled for Today</h2>
+        <h2 style={{color:' var(--text-color)'}}>Tasks Scheduled for Today</h2>
         {Array.isArray(todayTasks) && todayTasks.length > 0 ? ( // Ensure todayTasks is an array
           <ul>
             {todayTasks.map((task, index) => (
@@ -46,7 +46,7 @@ const Dashboard = () => {
             ))}
           </ul>
         ) : (
-          <p>No tasks scheduled for today.</p>
+          <p style={{color:' var(--text-color)'}}>No tasks scheduled for today.</p>
         )}
       </div>
     </div>

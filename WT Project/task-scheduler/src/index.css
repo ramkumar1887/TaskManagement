@@ -568,3 +568,10 @@ box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
   font-weight: bold;
   margin-top: 15px;
 }
+
+.calendar{
+  width:95%;
+  /* height: 80%; */
+  color:  var(--text-color);
+  margin: 10px;
+}
