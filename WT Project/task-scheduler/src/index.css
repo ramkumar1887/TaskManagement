@@ -307,7 +307,31 @@ body{
   overflow-y: hidden;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.1);
 }
-
+/* styles.css */
+.leftContainer {
+  flex: 1;
+  padding-left: 0px;
+  padding-right: 8px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left: 8px solid transparent;
+  /* margin-right: 8px;  */
+  border-right: 1px solid var(--text-color); /* Corrected for border */
+}
+.rightContainer {
+  flex: 1;
+  padding-left: 8px;
+  padding-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 8px solid transparent;
+  /* margin-right: 8px;  */
+  border-left: 1px solid var(--text-color); /* Corrected for border */
+}
 .list-header{
   display: flex;
   align-items: center;
@@ -320,7 +344,6 @@ body{
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
 }
-
 .plus-icon, .cross-icon{
   height: 40px;
   width: 40px;

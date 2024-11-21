@@ -111,7 +111,7 @@ const Login = ({ setCurrentPage }) => {
               helperText={
                 !email && Boolean(error) ? "Please fill this field." : ""
               }
-              sx={{
+              sx={{ 
                 "& .MuiInputLabel-root": {
                   color: "var(--text-color)", // Default label color
                 },

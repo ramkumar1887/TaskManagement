@@ -24,7 +24,8 @@ const Tasks = ({ setCurrentPage }) => {
   const liRef1 = useRef(null);
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false); // State for TaskForm visibility
   const [isEditing, setIsEditing] = useState(false);
-  const [isEditing1, setIsEditing1] = useState(false);
+  const [taskData, settaskData] = useState("");
+  const [taskID, settaskID] = useState("");
   const [editingTaskId, setEditingTaskId] = useState(null); // Track task being edited
   const [tasks, setTasks] = useState({
     todo: [],
@@ -175,10 +176,7 @@ const Tasks = ({ setCurrentPage }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  // Task Edit Functionality
-  const handleEditTask = (index, section) => {
-    setIsEditing1(true);
-  };
+  
   const handleSaveEdit = (index, section) => {
     //console.log("Save Called");
     handleUpdateTask(index, section, editedDescription); // Call a function to save changes
@@ -262,7 +260,10 @@ const Tasks = ({ setCurrentPage }) => {
                 className="task-card"
                 onClick={() => {
                   setIsTaskFormOpen(true);
-                  console.log("Task Form Called");
+                  settaskData(task.description);
+                  settaskID(task.id);
+                  //console.log(task.description);
+                  //console.log("Task Form Called");
                 }}
                 sx={{
                   //padding: 1,
@@ -512,11 +513,12 @@ const Tasks = ({ setCurrentPage }) => {
       {/* TaskForm Dialog */}
       <TaskForm
         open={isTaskFormOpen}
-        onClose={() => setIsTaskFormOpen(false)}
+        onClose={() => {setIsTaskFormOpen(false); settaskData("");settaskID('');}}
         //onSave={handleAddTask}   // Pass function to add task
+        taskData={taskData}
+        taskID={taskID}
       />
     </div>
   );
 };
-
 export default Tasks;

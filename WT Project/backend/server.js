@@ -7,7 +7,6 @@ const app = express();
 app.use(express.json()); // To parse JSON bodies
 const cors = require("cors");
 app.use(cors());
-
 // Use the URI from the .env file
 mongoose
   .connect(process.env.MONGODB_URI, {
