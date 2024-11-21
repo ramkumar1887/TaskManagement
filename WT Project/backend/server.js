@@ -19,20 +19,35 @@ mongoose
 // Import models and define API endpoints here
 const User = require("./models/User");
 const Task = require("./models/Task");
-
+const Teams = require("./models/Teams");
 // Define routes to interact with MongoDB
 app.get("/users", async (req, res) => {
   const users = await User.find({});
   res.json(users);
 });
-
+app.get("/uTeams", async (req, res) => {
+  try {
+    const { username } = req.query;
+    let user = await User.findOne({ username });
+    if (user) {
+      let TeamsList = user.teams;
+      // Fetch all team details using Mongoose
+      const teamsDetails = await Teams.find({ id: { $in: TeamsList } });
+      // Send the team details as a response
+      res.status(200).json(teamsDetails);
+    }
+  } catch (err) {
+    //console.error("Error fetching team details:", err);
+    res.status(500).json({ error: err });
+  }
+});
 app.get("/utasks", async (req, res) => {
   try {
     const { username } = req.query;
-    console.log(req.body);
-    console.log(`Requesed uid: ${username}`)
+    //console.log(req.body);
+    //console.log(`Requesed uid: ${username}`)
     let user = await User.findOne({ username });
-    console.log(`User: ${user}`);
+    //console.log(`User: ${user}`);
     if (user) {
       let Tasklist = user.taskIds;
       // Initialize the Tasks object
@@ -42,25 +57,22 @@ app.get("/utasks", async (req, res) => {
         completed: [],
       };
       for (const id of Tasklist) {
-
         let task = await Task.findOne({ id });
         console.log(task);
         console.log(`id: ${id}, status: ${task.status}`);
         // Categorize task based on its status
         if (task.status === "todo") {
           console.log(`${id} pushed to todo`);
-          Tasks.todo.push({id: task.id, description: task.description});
+          Tasks.todo.push({ id: task.id, description: task.description });
         } else if (task.status === "ongoing") {
           console.log(`${id} pushed to ongoing`);
-          Tasks.ongoing.push({id: task.id, description: task.description});
+          Tasks.ongoing.push({ id: task.id, description: task.description });
         } else if (task.status === "completed") {
           console.log(`${id} pushed to completed`);
-          Tasks.completed.push({id: task.id, description: task.description});
+          Tasks.completed.push({ id: task.id, description: task.description });
         }
       }
-      return res
-        .status(200)
-        .json(Tasks);
+      return res.status(200).json(Tasks);
     } else {
       return res.status(400).json({ message: "User does not exist" });
     }
