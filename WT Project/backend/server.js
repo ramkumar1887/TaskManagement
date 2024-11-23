@@ -41,6 +41,28 @@ app.get("/uTeams", async (req, res) => {
     res.status(500).json({ error: err });
   }
 });
+// Example API route (adjust according to your backend setup)
+app.get('/search', async (req, res) => {
+  try {
+    const { email } = req.query;
+    
+    // Replace this with your actual database query
+    const users = await db.collection('users')
+      .where('email', '>=', email)
+      .where('email', '<=', email + '\uf8ff')
+      .limit(5)
+      .get();
+    
+    const results = users.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+    
+    res.json(results);
+  } catch (error) {
+    res.status(500).json({ error: 'Error searching users' });
+  }
+});
 app.get("/utasks", async (req, res) => {
   try {
     const { username } = req.query;
