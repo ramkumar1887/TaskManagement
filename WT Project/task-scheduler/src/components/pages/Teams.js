@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Card,
@@ -37,6 +37,38 @@ const Teams = () => {
     `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}&backgroundColor=c0aede`,
     `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}&backgroundColor=d1d4f9`,
   ]);
+  const [cachedAvatar, setCachedAvatar] = useState(null);
+
+  useEffect(() => {
+    const cacheUserAvatar = async () => {
+      if (user?.photoURL) {
+        try {
+          // Try to get cached avatar from localStorage first
+          const cached = localStorage.getItem(`avatar_${user.uid}`);
+          if (cached) {
+            setCachedAvatar(cached);
+            return;
+          }
+
+          // If no cached version, fetch and cache it
+          const response = await fetch(user.photoURL);
+          const blob = await response.blob();
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            const base64data = reader.result;
+            localStorage.setItem(`avatar_${user.uid}`, base64data);
+            setCachedAvatar(base64data);
+          };
+          reader.readAsDataURL(blob);
+        } catch (error) {
+          console.error("Error caching avatar:", error);
+          setImageError(true);
+        }
+      }
+    };
+
+    cacheUserAvatar();
+  }, [user?.photoURL, user?.uid]);
 
   const getRandomAvatar = () => {
     // Option 1: avataaars - Cartoon-style human avatars (recommended)
@@ -86,24 +118,33 @@ const Teams = () => {
       setLoading(true);
       try {
         const usersRef = collection(db, 'users');
-        const q = query(
-          usersRef,
-          orderBy('email'),
-          startAt(value.toLowerCase()),
-          endAt(value.toLowerCase() + '\uf8ff'),
-        );
+        // First, let's check if we can get any users
+        const snapshot = await getDocs(usersRef);
+        console.log("Total users found:", snapshot.size); // Debug log
 
+        // Now let's get filtered users
+        const q = query(usersRef);
         const querySnapshot = await getDocs(q);
         const users = [];
+        
         querySnapshot.forEach((doc) => {
-          if (doc.id !== auth.currentUser.uid) {
+          const userData = doc.data();
+          console.log("User data:", userData); // Debug log
+          
+          // Check if the email includes the search value (case insensitive)
+          if (userData.email && 
+              userData.email.toLowerCase().includes(value.toLowerCase())) {
+            console.log("Adding user:", userData); // Debug log
             users.push({
               id: doc.id,
-              ...doc.data()
+              email: userData.email,
+              displayName: userData.displayName || userData.email,
+              photoURL: userData.photoURL
             });
           }
         });
         
+        console.log("Filtered users:", users); // Debug log
         setFilteredUsers(users);
       } catch (error) {
         console.error("Error searching users:", error);
@@ -157,8 +198,7 @@ const Teams = () => {
               onClose={() => setOpenDialog(false)}
               PaperProps={{
                 style: {
-                  width: "400px",
-                  maxWidth: "90vw",
+                  //minWidth: "90vw",
                   backgroundColor: "var(--primary)",
                   borderRadius: "8px",
                   position: "relative",
@@ -189,9 +229,11 @@ const Teams = () => {
               </DialogTitle>
               <DialogContent
                 style={{
-                  display: "flex",
-                  padding: "8px",
-                  backgroundColor: "var(--background-color)",
+                  display: 'flex',
+                  flexDirection: 'column',
+                  padding: '16px',
+                  backgroundColor: 'var(--background-color)',
+                  gap: '0px'
                 }}
               >
                 <TextField
@@ -203,26 +245,28 @@ const Teams = () => {
                   required
                   value={email}
                   onChange={(e) => handleEmailSearch(e.target.value)}
+                  style={{
+                    marginBottom: "0px",
+                  }}
                   sx={{
-                    mb: 2,
                     "& .MuiOutlinedInput-root": {
                       "& fieldset": {
-                        borderColor: "var(--secondary)", // Default border color
+                        borderColor: "var(--secondary)",
                       },
                       "&:hover fieldset": {
-                        borderColor: "var(--secondary)", // Hover border color
+                        borderColor: "var(--secondary)",
                       },
                       "&.Mui-focused fieldset": {
-                        borderColor: "var(--secondary)", // Focused border color
+                        borderColor: "var(--secondary)",
                       },
                     },
                     "& .MuiInputBase-input": {
-                      color: "var(--text-color)", // Text color
+                      color: "var(--text-color)",
                     },
                     "& .MuiInputLabel-root": {
-                      color: "var(--text-color)", // Label color
+                      color: "var(--text-color)",
                       "&.Mui-focused": {
-                        color: "var(--secondary)", // Focused label color
+                        color: "var(--secondary)",
                       },
                     },
                   }}
@@ -231,32 +275,49 @@ const Teams = () => {
                 {loading && (
                   <Typography
                     variant="body2"
-                    color="textSecondary"
+                    color="var(--text-color)"
                     align="center"
                   >
+                    Searching...
                   </Typography>
                 )}
 
-                <List>
-                  {filteredUsers.map((user) => (
-                    <ListItem
-                      key={user.id}
-                      button
-                      onClick={() => {
-                        // Add your logic to invite/add user
-                        console.log("Adding user:", user);
-                      }}
-                    >
-                      <ListItemAvatar>
-                        <Avatar src={user.photoURL || getAvatarGroup()} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={user.displayName || user.email}
-                        secondary={user.email}
-                      />
-                    </ListItem>
-                  ))}
-                </List>
+                {filteredUsers.length > 0 && (
+                  <List 
+                    style={{
+                      backgroundColor: "white",
+                      padding: "0px",
+                      //borderRadius: "8px",
+                      //maxHeight: '200px',
+                      overflowY: 'auto',
+
+                    }}
+                  >
+                    {filteredUsers.map((user) => (
+                      <ListItem
+                        key={user.id}
+                        button
+                        style={{
+                          padding: "8px",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setEmail(user.email);
+                          setFilteredUsers([]); // Clear the list
+                          document.querySelector('input[type="email"]').focus(); // Re-focus the TextField
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <Avatar src={user.photoURL || getAvatarGroup()} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={user.displayName || user.email}
+                          secondary={user.email}
+                        />
+                      </ListItem>
+                    ))}
+                  </List>
+                )}
               </DialogContent>
               <DialogActions
                 style={{
@@ -370,7 +431,7 @@ const Teams = () => {
                 image={
                   imageError
                     ? defaultProfileImage
-                    : user.photoURL || defaultProfileImage
+                    : cachedAvatar || user.photoURL || defaultProfileImage
                 }
                 onError={() => setImageError(true)}
               />

@@ -487,7 +487,7 @@ const TaskForm = ({ open, onClose, onSave, taskData, taskID }) => {
         <Button
           style={{
             backgroundColor: "var(--secondary)",
-            color: "var(--text-color)",
+            color: "var(--opText)",
           }}
           onClick={() => onSave({ taskDescription, attachments })}
         >

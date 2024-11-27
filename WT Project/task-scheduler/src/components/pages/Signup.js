@@ -3,6 +3,8 @@ import { TextField, Button, Grid, Typography, Card, CardContent } from '@mui/mat
 import { auth, provider, createUserWithEmailAndPassword, signInWithPopup } from './firebase';
 import { Google } from '@mui/icons-material';
 import { ArrowBack } from '@mui/icons-material';
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
+const db = getFirestore();
 
 const Signup = ({ setCurrentPage }) => {
     const [firstName, setFirstName] = useState('');
@@ -61,14 +63,25 @@ const Signup = ({ setCurrentPage }) => {
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
-                //console.log('User signed up:', user);
+                
+                // Store user data in Firestore
+                await setDoc(doc(db, 'users', user.uid), {
+                    uid: user.uid,
+                    email: email.toLowerCase(), // Store email in lowercase for easier searching
+                    displayName: `${firstName} ${lastName}`,
+                    firstName: firstName,
+                    lastName: lastName,
+                    photoURL: user.photoURL || null,
+                    createdAt: new Date().toISOString()
+                });
+
                 localStorage.setItem('user', JSON.stringify(user));
                 fetch("/users", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({uid: user.providerData[0].uid}),
                   });
-                setCurrentPage('Dashboard');  // Redirect to dashboard after signup
+                setCurrentPage('Dashboard');
             } catch (error) {
                 setError(error.message);
             }
@@ -79,14 +92,23 @@ const Signup = ({ setCurrentPage }) => {
         try {
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            //console.log('Google Sign Up:', user);
+            
+            // Store Google user data in Firestore
+            await setDoc(doc(db, 'users', user.uid), {
+                uid: user.uid,
+                email: user.email.toLowerCase(),
+                displayName: user.displayName,
+                photoURL: user.photoURL,
+                createdAt: new Date().toISOString()
+            });
+
             localStorage.setItem('user', JSON.stringify(user));
             fetch("http://localhost:5000/users", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({username: user.providerData[0].uid}),
               });
-            setCurrentPage('Dashboard');  // Redirect to dashboard after Google signup
+            setCurrentPage('Dashboard');
         } catch (error) {
             setError(error.message);
         }

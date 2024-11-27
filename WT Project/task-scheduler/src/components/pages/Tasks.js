@@ -436,7 +436,7 @@ const Tasks = ({ setCurrentPage }) => {
                   alignSelf: "flex-end", // Align the button to the right
                   marginTop: "auto",
                   backgroundColor: "var(--secondary)", // Ensure the button has secondary color
-                  color: "var(--text-color)",
+                  color: "var(--opText)",
                 }}
               >
                 Create
