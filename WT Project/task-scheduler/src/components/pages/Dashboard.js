@@ -36,17 +36,12 @@ const Dashboard = () => {
   }, []);
 
   return (
-<<<<<<< Updated upstream
-    <div className='page-container'>
-      <h1 className='page-title'>Dashboard</h1>
-      <p className='greeting-text'>{greeting}, {JSON.parse(localStorage.getItem('user')).displayName.split(" ")[0]}</p>
-      <p className='page-description' style={{ marginTop: '0px' }}>
-=======
     <div className="page-container">
       <h1 className="page-title">Dashboard</h1>
-      <p className="greeting-text">{greeting}, User</p>
+      <p className="greeting-text">
+        {greeting}, {JSON.parse(localStorage.getItem('user')).displayName.split(" ")[0]}
+      </p>
       <p className="page-description" style={{ marginTop: "0px" }}>
->>>>>>> Stashed changes
         Here is an Overview of your Schedule
       </p>
       <div className="today-tasks-container">

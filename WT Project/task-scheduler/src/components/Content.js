@@ -12,6 +12,9 @@ const Content = ({ currentPage, setCurrentPage }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [visible, setVisible] = useState(false);
     const [showProfilePopup, setShowProfilePopup] = useState(false);
+    const [cachedAvatar, setCachedAvatar] = useState(null);
+    const defaultProfileImage = "path/to/your/default/image.png"; // Add your default image path
+
     // Effect to check for user login status
     useEffect(() => {
         const user = localStorage.getItem('user');
@@ -27,6 +30,14 @@ const Content = ({ currentPage, setCurrentPage }) => {
 
         return () => clearTimeout(timer); // Cleanup on unmount
     }, [currentPage]); // Run this effect when currentPage changes
+
+    // Add this effect to handle the avatar
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user?.photoURL) {
+            setCachedAvatar(user.photoURL);
+        }
+    }, []);
 
     const toggleProfilePopup = () => setShowProfilePopup(!showProfilePopup);
 
@@ -65,13 +76,17 @@ const Content = ({ currentPage, setCurrentPage }) => {
                         <div className='profile'
                         onMouseEnter={toggleProfilePopup}
                             onMouseLeave={toggleProfilePopup}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="profile-icon"
-                            style={{color:"var(--text-color)"}}
-                            
-                            
-                            >
-                                <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z" clipRule="evenodd" />
-                            </svg>
+                            <img 
+                                src={cachedAvatar || defaultProfileImage}
+                                alt="Profile"
+                                className="profile-icon"
+                                style={{
+                                    width: "50px",
+                                    height: "50px",
+                                    borderRadius: "50%",
+                                    objectFit: "cover"
+                                }}
+                            />
                             {showProfilePopup && (
                                 <div className="profile-popup" >
                                     <p>{JSON.parse(localStorage.getItem('user')).displayName}</p>
