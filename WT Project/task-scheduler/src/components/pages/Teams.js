@@ -40,35 +40,18 @@ const Teams = () => {
   const [cachedAvatar, setCachedAvatar] = useState(null);
 
   useEffect(() => {
-    const cacheUserAvatar = async () => {
-      if (user?.photoURL) {
-        try {
-          // Try to get cached avatar from localStorage first
-          const cached = localStorage.getItem(`avatar_${user.uid}`);
-          if (cached) {
-            setCachedAvatar(cached);
-            return;
-          }
-
-          // If no cached version, fetch and cache it
-          const response = await fetch(user.photoURL);
-          const blob = await response.blob();
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64data = reader.result;
-            localStorage.setItem(`avatar_${user.uid}`, base64data);
-            setCachedAvatar(base64data);
-          };
-          reader.readAsDataURL(blob);
-        } catch (error) {
-          console.error("Error caching avatar:", error);
-          setImageError(true);
-        }
+    const loadUserAvatar = () => {
+      if (!user?.photoURL) {
+        setImageError(true);
+        return;
       }
+
+      // Set the photoURL directly without trying to cache it
+      setCachedAvatar(user.photoURL);
     };
 
-    cacheUserAvatar();
-  }, [user?.photoURL, user?.uid]);
+    loadUserAvatar();
+  }, [user?.photoURL]);
 
   const getRandomAvatar = () => {
     // Option 1: avataaars - Cartoon-style human avatars (recommended)
@@ -428,12 +411,12 @@ const Teams = () => {
                   objectFit: "cover",
                   margin: "auto auto",
                 }}
-                image={
-                  imageError
-                    ? defaultProfileImage
-                    : cachedAvatar || user.photoURL || defaultProfileImage
-                }
-                onError={() => setImageError(true)}
+                image={cachedAvatar || defaultProfileImage}
+                onError={() => {
+                  console.error("Failed to load image:", cachedAvatar);
+                  setImageError(true);
+                  setCachedAvatar(defaultProfileImage);
+                }}
               />
               <CardContent style={{ padding: "0px" }}>
                 <Typography
