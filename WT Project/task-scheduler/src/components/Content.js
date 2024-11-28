@@ -91,7 +91,11 @@ const Content = ({ currentPage, setCurrentPage }) => {
                                 <div className="profile-popup" >
                                     <p>{JSON.parse(localStorage.getItem('user')).displayName}</p>
                                     <button onClick={() => alert('Switch User Clicked')}>Switch User</button>
-                                    <button onClick={() => alert('Logout Clicked')}>Logout</button>
+                                    <button onClick={() => {
+                                        localStorage.clear();
+                                        setCurrentPage('Landing');
+                                        setIsLoggedIn(false);
+                                    }}>Logout</button>
                                 </div>
                             )}
                         </div>
