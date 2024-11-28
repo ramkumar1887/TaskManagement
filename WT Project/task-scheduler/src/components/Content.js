@@ -11,7 +11,7 @@ import AddTask from './pages/AddTask';
 const Content = ({ currentPage, setCurrentPage }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [visible, setVisible] = useState(false);
-
+    const [showProfilePopup, setShowProfilePopup] = useState(false);
     // Effect to check for user login status
     useEffect(() => {
         const user = localStorage.getItem('user');
@@ -27,6 +27,8 @@ const Content = ({ currentPage, setCurrentPage }) => {
 
         return () => clearTimeout(timer); // Cleanup on unmount
     }, [currentPage]); // Run this effect when currentPage changes
+
+    const toggleProfilePopup = () => setShowProfilePopup(!showProfilePopup);
 
     return (
         <div className='content'>
@@ -55,6 +57,27 @@ const Content = ({ currentPage, setCurrentPage }) => {
                                     style={{backgroundColor:'var(--primary)', color:'var(--text-color)'}}
                                     >Sign Up</button>
                                 </>
+                            )}
+                        </div>
+                    )}
+
+                    {currentPage !== 'Landing' && (
+                        <div className='profile'
+                        onMouseEnter={toggleProfilePopup}
+                            onMouseLeave={toggleProfilePopup}>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="profile-icon"
+                            style={{color:"var(--text-color)"}}
+                            
+                            
+                            >
+                                <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-5.5-2.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0ZM10 12a5.99 5.99 0 0 0-4.793 2.39A6.483 6.483 0 0 0 10 16.5a6.483 6.483 0 0 0 4.793-2.11A5.99 5.99 0 0 0 10 12Z" clipRule="evenodd" />
+                            </svg>
+                            {showProfilePopup && (
+                                <div className="profile-popup" >
+                                    <p>{JSON.parse(localStorage.getItem('user')).displayName}</p>
+                                    <button onClick={() => alert('Switch User Clicked')}>Switch User</button>
+                                    <button onClick={() => alert('Logout Clicked')}>Logout</button>
+                                </div>
                             )}
                         </div>
                     )}
