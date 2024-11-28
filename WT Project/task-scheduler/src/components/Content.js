@@ -13,7 +13,7 @@ const Content = ({ currentPage, setCurrentPage }) => {
     const [visible, setVisible] = useState(false);
     const [showProfilePopup, setShowProfilePopup] = useState(false);
     const [cachedAvatar, setCachedAvatar] = useState(null);
-    const defaultProfileImage = "path/to/your/default/image.png"; // Add your default image path
+    const defaultProfileImage = `https://api.dicebear.com/7.x/avataaars/svg?seed=${Math.random()}&backgroundColor=b6e3f4,c0aede,d1d4f9`; // Add your default image path
 
     // Effect to check for user login status
     useEffect(() => {
