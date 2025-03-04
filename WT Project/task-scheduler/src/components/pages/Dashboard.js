@@ -41,9 +41,6 @@ const Dashboard = () => {
       <p className="greeting-text">
         {greeting}, {JSON.parse(localStorage.getItem('user')).displayName.split(" ")[0]}
       </p>
-      <p className="page-description" style={{ marginTop: "0px" }}>
-        Here is an Overview of your Schedule
-      </p>
       <div className="today-tasks-container">
         <h2 style={{ color: " var(--text-color)" }}>
           Tasks Scheduled for Today

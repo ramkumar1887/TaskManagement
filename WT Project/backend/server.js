@@ -195,4 +195,45 @@ app.post("/tasks", async (req, res) => {
   }
 });
 
+// Add person to user's people list
+app.post("/addPerson", async (req, res) => {
+  try {
+    const { username, personId } = req.body;
+    
+    // Find the user
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Add person if not already in the list
+    if (!user.people.includes(personId)) {
+      user.people.push(personId);
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Person added successfully" });
+  } catch (error) {
+    console.error("Error adding person:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+// Get user's people list
+app.get("/people", async (req, res) => {
+  try {
+    const { username } = req.query;
+    const user = await User.findOne({ username });
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ peopleIds: user.people });
+  } catch (error) {
+    console.error("Error fetching people:", error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 app.listen(5000, () => console.log("Server running on port 5000"));

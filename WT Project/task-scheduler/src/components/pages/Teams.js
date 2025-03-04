@@ -139,6 +139,85 @@ const Teams = () => {
     }
   };
 
+  const handleAddPerson = async () => {
+    if (!email) {
+      console.log('No email provided'); // Debug log
+      return;
+    }
+    
+    try {
+      // Find the selected user from filteredUsers
+      const selectedUser = filteredUsers.find(user => user.email === email);
+      if (!selectedUser) {
+        console.log('No matching user found'); // Debug log
+        return;
+      }
+
+      console.log('Adding user:', selectedUser); // Debug log
+
+      // Add to local state
+      setPeople(prev => [...prev, selectedUser]);
+
+      // Update in MongoDB
+      const response = await fetch(`http://localhost:5000/addPerson`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: user.uid,
+          personId: selectedUser.id
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Clear the dialog
+      setEmail('');
+      setOpenDialog(false);
+      setFilteredUsers([]);
+
+    } catch (error) {
+      console.error('Error adding person:', error);
+      // Optionally add user feedback here
+      alert('Failed to add person. Please try again.');
+    }
+  };
+
+  // Add this useEffect to load people on component mount
+  useEffect(() => {
+    const loadPeople = async () => {
+      try {
+        // First get people IDs from MongoDB
+        const response = await fetch(`http://localhost:5000/people?username=${user.uid}`);
+        const { peopleIds } = await response.json();
+
+        // Then fetch full details from Firebase
+        const usersRef = collection(db, 'users');
+        const peopleDetails = [];
+        
+        for (const id of peopleIds) {
+          const q = query(usersRef, where('uid', '==', id));
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach((doc) => {
+            peopleDetails.push({
+              id: doc.id,
+              ...doc.data()
+            });
+          });
+        }
+        
+        setPeople(peopleDetails);
+      } catch (error) {
+        console.error('Error loading people:', error);
+      }
+    };
+
+    loadPeople();
+  }, [user.uid]);
+
   return (
     <div className="page-container">
       <div
@@ -326,7 +405,7 @@ const Teams = () => {
                     backgroundColor: "var(--secondary)",
                     color: "var(--text-color)",
                   }}
-                  //onClick={() => onSave({ taskDescription, attachments })}
+                  onClick={handleAddPerson}
                 >
                   Add
                 </Button>
@@ -431,6 +510,47 @@ const Teams = () => {
               </CardContent>
             </Card>
           </Grid>
+
+          {/* People cards */}
+          {people.map((person) => (
+            <Grid item xs={12} sm={4} md={1.25} key={person.id}>
+              <Card style={{
+                backgroundColor: "var(--primary)",
+                height: "100%",
+              }}>
+                <CardMedia
+                  component="img"
+                  alt="Profile Picture"
+                  style={{
+                    marginTop: "24px",
+                    marginBottom: "8px",
+                  }}
+                  sx={{
+                    width: 70,
+                    height: 70,
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                    margin: "auto auto",
+                  }}
+                  image={person.photoURL || getRandomAvatar()}
+                  onError={(e) => {
+                    e.target.src = getRandomAvatar();
+                  }}
+                />
+                <CardContent style={{ padding: "0px" }}>
+                  <Typography
+                    variant="h6"
+                    align="center"
+                    fontSize="15px"
+                    color="var(--text-color)"
+                    paddingBottom="64px"
+                  >
+                    {person.displayName || person.email}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
         <h2 style={{ color: "var(--text-color)" }}>Teams</h2>
         {/* Teams Section (can be dynamically populated with teams data) */}
