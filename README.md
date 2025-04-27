@@ -26,7 +26,7 @@ TaskManagement/
 
 ## 🚀 Getting Started
 
-### Installation
+### Installation and Running the project
 
 1. Clone the repository:
 
@@ -59,16 +59,10 @@ TaskManagement/
 
    > **Note:** Make sure the backend is running before using the frontend for full functionality.
 
-### Running the Project
-
-- Simply open the `index.html` file in your web browser.
-- Alternatively, use a local server for a better experience (recommended for dynamic functionality).
-
-That's it! 🎉
 
 ## 📷 Screenshots
 
-(Add screenshots here later to showcase the app.)
+![Dashboard](WT Project/screenshots/dashboard.png)
 
 ## 🙌 Contributing
 
