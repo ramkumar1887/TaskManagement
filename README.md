@@ -12,18 +12,16 @@ A web-based Task Management application designed to help users organize, track, 
 ## 🛠️ Built With
 
 - **Frontend:** HTML, CSS, JavaScript
-- **Backend:** (Coming Soon or To be Added)
-- **Database:** (Coming Soon or To be Added)
+- **Backend:** Express
+- **Database:** Mongoose
 
-> **Note:** Currently, the project mainly includes the frontend part.
 
 ## 📁 Project Structure
 
 ```
 TaskManagement/
-├── index.html
-├── style.css
-└── script.js
+├── backend
+├── task-scheduler(frontend)
 ```
 
 ## 🚀 Getting Started
