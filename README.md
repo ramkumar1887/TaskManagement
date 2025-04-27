@@ -62,7 +62,12 @@ TaskManagement/
 
 ## 📷 Screenshots
 
-![Dashboard](WT Project/screenshots/dashboard.png)
+![Landing Page](screenshots/landing.png)
+![Login Page](screenshots/login_page.png)
+![Dashboard](screenshots/dashboard.png)
+![Tasks](screenshots/tasks.png)
+![Calendar](screenshots/calender.png)
+![Teams](screenshots/teams.png)
 
 ## 🙌 Contributing
 
