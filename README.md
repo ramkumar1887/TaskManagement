@@ -62,12 +62,23 @@ TaskManagement/
 
 ## 📷 Screenshots
 
-![Landing Page](screenshots/landing.png)
-![Login Page](screenshots/login_page.png)
-![Dashboard](screenshots/dashboard.png)
-![Tasks](screenshots/tasks.png)
-![Calendar](screenshots/calender.png)
-![Teams](screenshots/teams.png)
+### Landing Page
+![Landing Page](WT Project/screenshots/landing.png)
+
+### Login Page
+![Login Page](WT Project/screenshots/login_page.png)
+
+### Dashboard
+![Dashboard](WT Project/screenshots/dashboard.png)
+
+### Tasks
+![Tasks](WT Project/screenshots/tasks.png)
+
+### Calendar
+![Calendar](WT Project/screenshots/calender.png)
+
+### Teams
+![Teams](WT Project/screenshots/teams.png)
 
 ## 🙌 Contributing
 
