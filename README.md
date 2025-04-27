@@ -28,13 +28,34 @@ TaskManagement/
 
 ## 🚀 Getting Started
 
+### Installation
+
 1. Clone the repository:
 
    ```bash
    git clone https://github.com/ramkumar1887/TaskManagement.git
    ```
 
-2. Open `index.html` in your browser.
+2. Navigate to the project folder:
+
+   ```bash
+   cd TaskManagement
+   ```
+
+3. (Optional) Use a live server extension or simple HTTP server to run the project locally.
+
+   If you have Python installed:
+
+   ```bash
+   python3 -m http.server
+   ```
+
+   Then open [http://localhost:8000](http://localhost:8000) in your browser.
+
+### Running the Project
+
+- Simply open the `index.html` file in your web browser.
+- Alternatively, use a local server for a better experience (recommended for dynamic functionality).
 
 That's it! 🎉
 
@@ -51,7 +72,3 @@ Feel free to fork the repository and create a pull request.
 
 - [Ramkumar Babu Baragi](https://github.com/ramkumar1887)
 - [Srishanth-p](https://github.com/Srishanth-p)
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
