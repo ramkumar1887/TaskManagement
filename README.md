@@ -40,15 +40,24 @@ TaskManagement/
    cd TaskManagement
    ```
 
-3. (Optional) Use a live server extension or simple HTTP server to run the project locally.
+3. (Optional) Run both the backend and frontend locally:
 
-   If you have Python installed:
+   **Start the backend (Express server):**
 
    ```bash
-   python3 -m http.server
+   cd backend
+   node server.js
    ```
 
-   Then open [http://localhost:8000](http://localhost:8000) in your browser.
+   **Start the frontend:**
+
+   ```bash
+   cd ../task-scheduler(frontend)
+   npm start
+   ```
+
+
+   > **Note:** Make sure the backend is running before using the frontend for full functionality.
 
 ### Running the Project
 
